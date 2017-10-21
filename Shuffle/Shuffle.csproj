@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RoomBuilder.cs" />
     <Compile Include="FirstComponent.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
