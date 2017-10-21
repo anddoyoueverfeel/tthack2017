@@ -8,64 +8,49 @@ using System.Text;
 
 namespace Shuffle
 {
-    public class Room : ISteppable<List<Point3d>>
+    public class Room
     {
-        public List<Point3d> points { get; }
+        public Guid id { get; }
         public double size { get; }
         public Boolean IsValid { get
             {
                 return size > 0;
             } }
 
-        public Room(List<Point3d> points, double size)
+        public Room(double size)
         {
-            this.points = points;
+            this.id = new Guid();
             this.size = size;
         }
-
-        private int encode(Point3d point, int maxX)
+        
+        public Dictionary<string, int> step(List<Cell> points)
         {
-            var X = (int)Math.Round(point.X) + 10;
-            var Y = (int)Math.Round(point.Y) + 10;
-            return Y * maxX + X;
-        }
-
-        override public List<Point3d> step()
-        {
-            List<Point3d> result = new List<Point3d>();
+            int priority = 0;
+            Dictionary<string, int> result = new Dictionary<string, int>();
             if (points.Count > size)
             {
                 return result;
             }
-            int maxX = 0;
-            foreach (Point3d point in points)
+            HashSet<string> grids = new HashSet<string>();
+            foreach (Cell point in points)
             {
-                if (point.X > maxX)
-                {
-                    maxX = (int)Math.Round(point.X);
-                }
+                grids.Add(point.ToString());
             }
-            maxX += 10;
-            HashSet<int> grids = new HashSet<int>();
-            foreach (Point3d point in points)
-            {
-                grids.Add(encode(point, maxX));
-            }
-            foreach (Point3d point in points)
+            foreach (Cell point in points)
             {
                 foreach (int stepX in new int[3] { -1, 0, 1 }) {
                     foreach (int stepY in new int[3] { -1, 0, 1 })
                     {
-                        Point3d newPoint = point + new Point3d(stepX, stepY, 0);
+                        Cell newPoint = new Cell(point.X + stepX, point.Y + stepY, 0, null);
                         if (newPoint.X < 0 || newPoint.Y < 0)
                         {
                             continue;
                         }
-                        int key = encode(newPoint, maxX);
+                        string key = newPoint.ToString();
                         if (!grids.Contains(key))
                         {
                             grids.Add(key);
-                            result.Add(newPoint);
+                            result.Add(newPoint.ToString(), priority);
                         }
                     }
                 }
@@ -112,7 +97,7 @@ namespace Shuffle
 
         public override IGH_Goo Duplicate()
         {
-            return new RoomGoo(new Room(Value.points, Value.size));
+            return new RoomGoo(new Room(Value.size));
         }
 
         public override string ToString()

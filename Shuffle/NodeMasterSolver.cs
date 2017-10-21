@@ -12,22 +12,20 @@ namespace Shuffle
         /// <summary>
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
+
+        private bool firstRunFlag = true;
+        //cell xy, Cell class 
+        private Dictionary<string, Cell> simulationField = new Dictionary<string, Cell>();
+        //room id, room class
+        private Dictionary<Guid, Room> simulationRooms = new Dictionary<Guid, Room>();
+
         public MasterSolver()
           : base("ShuffleSolver", "Solver",
               "Description",
               "Category", "Subcategory")
         {
         }
-
-        private bool firstRunFlag = true;
-        //cell xy, Cell class 
-        private Dictionary<string, Cell> simulationField;
-        //room id, room class
-        private Dictionary<int, Room> simulationRooms;
         
-
-
-
 
         //structure for holding a grid matrix
         //cell 
@@ -123,22 +121,20 @@ namespace Shuffle
                     simulationField.Add(cellAsPoint.Y.ToString() + cellAsPoint.X.ToString(), new Cell());
                 }
 
-
-                int roomIndex = 1;
-
+                
                 //set rooms from input (rooms are read once and persisted)
                 foreach (Room room in roomsToProcess)
                 {
-                    simulationRooms.Add(roomIndex, room);
-                    roomIndex++;
+                    simulationRooms.Add(room.id, room);
                 }
             }
 
-
+            //TODO:
+            List<Cell> cells = new List<Cell>();
             //call each room's "step" method
             foreach (Room simulationRoom in simulationRooms.Values)
             {
-                Dictionary<string, int> desiresFromRoom = simulationRoom.step();
+                Dictionary<string, int> desiresFromRoom = simulationRoom.step(cells);
 
                 foreach (KeyValuePair<string, int> desireFromRoom in desiresFromRoom)
                 {
@@ -161,7 +157,7 @@ namespace Shuffle
                 //first int is what room "wants" this cell
                 //second int is how "badly" it wants it
 
-                results.MaxBy(kvp => kvp.Value).Key;
+                // results.MaxBy(kvp => kvp.Value).Key;
 
             }
 
