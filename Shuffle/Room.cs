@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Shuffle
 {
-    public class Room
+    public class Room : ISteppable<List<Point3d>>
     {
         public List<Point3d> points { get; }
         public double size { get; }
@@ -30,7 +30,7 @@ namespace Shuffle
             return Y * maxX + X;
         }
 
-        public List<Point3d> step()
+        override public List<Point3d> step()
         {
             List<Point3d> result = new List<Point3d>();
             if (points.Count > size)
