@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-namespace MyProject1
+namespace Shuffle
 {
-    public class Shuffle : GH_Component
+    public class FirstComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -15,10 +15,10 @@ namespace MyProject1
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public Shuffle()
-          : base("MyProject1", "ASpi",
+        public FirstComponent()
+          : base("name", "ASpi",
               "Construct an Archimedean, or arithmetic, spiral given its radii and number of turns.",
-              "Curve", "Primitive")
+              "cat", "subcat")
         {
         }
 
@@ -158,7 +158,7 @@ namespace MyProject1
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("d920171d-bcda-4a07-a4f5-93d1ee564739"); }
+            get { return new Guid("b8fbac2d-9aee-4fe4-bfc6-9b0b658e9e2f"); }
         }
     }
 }

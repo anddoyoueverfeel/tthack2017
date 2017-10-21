@@ -7,11 +7,11 @@ using Rhino.PlugIns;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MyProject1")]
+[assembly: AssemblyTitle("Shuffle")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Handel Architects")]
-[assembly: AssemblyProduct("MyProject1")]
+[assembly: AssemblyProduct("Shuffle")]
 [assembly: AssemblyCopyright("Copyright © Handel Architects 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +22,7 @@ using Rhino.PlugIns;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3ee62344-64bc-4a00-8455-79ea252e6fac")] // This will also be the Guid of the Rhino plug-in
+[assembly: Guid("ada243fc-9e26-4f71-ad7f-8fe5bcf345c7")] // This will also be the Guid of the Rhino plug-in
 
 // Version information for an assembly consists of the following four values:
 //

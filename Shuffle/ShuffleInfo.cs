@@ -2,9 +2,9 @@
 using System.Drawing;
 using Grasshopper.Kernel;
 
-namespace MyProject1
+namespace Shuffle
 {
-    public class MyProject1Info : GH_AssemblyInfo
+    public class ShuffleInfo : GH_AssemblyInfo
     {
         public override string Name
         {
@@ -33,7 +33,7 @@ namespace MyProject1
         {
             get
             {
-                return new Guid("08147d01-0e0c-439e-8014-a82422b499cf");
+                return new Guid("5dcd986f-dc8c-4134-9e49-6e8a8384328c");
             }
         }
 

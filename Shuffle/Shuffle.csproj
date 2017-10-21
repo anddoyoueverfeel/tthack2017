@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3EE62344-64BC-4A00-8455-79EA252E6FAC}</ProjectGuid>
+    <ProjectGuid>{ADA243FC-9E26-4F71-AD7F-8FE5BCF345C7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyProject1</RootNamespace>
-    <AssemblyName>MyProject1</AssemblyName>
+    <RootNamespace>Shuffle</RootNamespace>
+    <AssemblyName>Shuffle</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -53,8 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Shuffle.cs" />
-    <Compile Include="MyProject1Info.cs" />
+    <Compile Include="FirstComponent.cs" />
+    <Compile Include="ShuffleInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
