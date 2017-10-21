@@ -34,9 +34,9 @@ namespace Shuffle
         
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<Point3d> points = new List<Point3d>();
+            List<Cell> cells = new List<Cell>();
             double size = 0;
-            if (!DA.GetDataList(0, points))
+            if (!DA.GetDataList(0, cells))
             {
                 return;
             }
@@ -44,7 +44,7 @@ namespace Shuffle
             {
                 return;
             }
-            DA.SetData(0, new RoomGoo(new Room(points, size)));
+            DA.SetData(0, new RoomGoo(new Room(size)));
         }
     }
 }
