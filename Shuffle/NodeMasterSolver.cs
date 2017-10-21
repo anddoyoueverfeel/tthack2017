@@ -22,7 +22,7 @@ namespace Shuffle
         public MasterSolver()
           : base("ShuffleSolver", "Solver",
               "Description",
-              "Category", "Subcategory")
+              "Shuffle", "Subcategory")
         {
         }
         

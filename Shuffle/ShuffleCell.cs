@@ -85,7 +85,7 @@ namespace Shuffle
 
     public class CellParam : GH_Param<CellGoo>
     {
-        CellParam() : base("Cell", "C", "The cell x, y", "Shuffle", "Parameters", GH_ParamAccess.item)
+        public CellParam() : base("Cell", "C", "The cell x, y", "Shuffle", "Parameters", GH_ParamAccess.item)
         {
 
         }
