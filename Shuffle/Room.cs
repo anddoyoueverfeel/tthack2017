@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace Shuffle
 {
@@ -43,8 +44,10 @@ namespace Shuffle
         {
             Dictionary<string, int> result = new Dictionary<string, int>();
             Point3d cellCenter = Utils.Centroid(cells);
+            Debug.Print("cell center: " + cellCenter);
             bool includeAllBlocks = true;
             foreach (ShuffleBlock block in blocks) {
+                Debug.Print("process block");
                 Point3d outsideCenter;
                 if (Utils.GetCenterForOutsideCells(block, cells, out outsideCenter))
                 {
@@ -53,6 +56,7 @@ namespace Shuffle
                     int deltaX, deltaY;
                     Utils.QuantifyDirection(direction, out deltaX, out deltaY);
                     block.setDirection(deltaX, deltaY);
+                    Debug.Print(deltaX + "," + deltaY);
                 } else
                 {
                     block.setDirection(0, 0);

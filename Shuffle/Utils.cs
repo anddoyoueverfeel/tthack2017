@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace Shuffle
 {
@@ -32,6 +33,8 @@ namespace Shuffle
             double angle = Math.Atan2(direction.Y, direction.X);
             double x = Math.Cos(angle);
             double y = Math.Sin(angle);
+
+            Debug.Print("Direction: " + direction + " angle: " + angle + " x: " + x + " y: " + y);
             if (Math.Abs(x) < 0.38)
             {
                 deltaX = 0;
@@ -71,7 +74,16 @@ namespace Shuffle
 
         public static bool GetCenterForOutsideCells(ShuffleBlock block, List<Cell> cells, out Point3d outsideCenter)
         {
+            if (block == null)
+            {
+                outsideCenter = new Point3d();
+                return false;
+            }
             var boundingBox = block.GetBoundingBox();
+            boundingBox[BBOX_MIN] = new Cell(0, 0, Guid.Empty, new Dictionary<Guid, int>(), new Point3d(0, 0, 0));
+            boundingBox[BBOX_MAX] = new Cell(60, 60, Guid.Empty, new Dictionary<Guid, int>(), new Point3d(60, 60, 0));
+
+            Debug.Print("boundingBox: " + boundingBox[BBOX_MIN] + "." + boundingBox[BBOX_MAX] + "\n");
             var sumPoint = AddCellsInBoundingBox(boundingBox);
             var totalCells = CountCellsInBoundingBox(boundingBox);
             var sumInsidePoint = new Point3d(0, 0, 0);
@@ -84,7 +96,10 @@ namespace Shuffle
                     sumInsidePoint += cell.point;
                 }
             }
+            Debug.Print("sumInsidePoint: " + sumInsidePoint + "\n");
             int totalCellsOutside = totalCells - totalCellsInside;
+            Debug.Print("total cells: " + totalCells + "\n");
+            Debug.Print("total inside cells: " + totalCellsInside + "\n");
             if (totalCellsOutside == 0)
             {
                 outsideCenter = new Point3d();
@@ -92,6 +107,7 @@ namespace Shuffle
             }
             Point3d outsidePoint = (Point3d)(sumPoint - sumInsidePoint);
             outsideCenter = outsidePoint / totalCellsOutside;
+            Debug.Print("outside center: " + outsideCenter + "\n");
             return true;
         }
     }

@@ -6,6 +6,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 using Grasshopper.Kernel.Types;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace Shuffle
 {
@@ -58,11 +59,12 @@ namespace Shuffle
             if (!DA.GetData(3, ref name))
             {
                 return;
-            }/*
+            }
             if (!DA.GetDataList(4, blocks))
             {
-                //return;
-            }*/
+                blocks = new List<ShuffleBlock>();
+            }
+            Debug.Print(name + ":" + blocks.Count);
             // Add read of blocks;
             DA.SetData(0, new Room(size, cell, blocks, Guid.NewGuid(), priority, name));
         }
