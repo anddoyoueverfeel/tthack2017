@@ -15,7 +15,8 @@ namespace Shuffle
         private int m_priority;
         private List<Curve> m_geomOfObject;
         private List<Curve> m_gGeomOfClearance;
-
+        private int deltaX = 0;
+        private int deltaY = 0;
 
         //constructors
         public ShuffleBlock()
@@ -72,7 +73,30 @@ namespace Shuffle
         //to do: does this actually do the moving?
         public void setDirection(int deltaX, int deltaY)
         {
+            this.deltaX = deltaX;
+            this.deltaY = deltaY;
+        }
 
+        public void Move()
+        {
+            //Vector3d movementVector = new Vector3d(deltaX, deltaY, 0);
+            var xf = Rhino.Geometry.Transform.Translation(deltaX, deltaY, 0);
+            //Rhino.Geometry.Transform actualTransform = new Tran();
+            //actualTransform.Translate
+            //Transform something = new Translation(deltaX, deltaY, 0);
+
+
+            m_centerPoint.Transform(xf);
+
+            foreach (Curve thing in m_geomOfObject)
+            {
+                thing.Transform(xf);
+            }
+            foreach (Curve thing in m_gGeomOfClearance)
+            {
+                thing.Transform(xf);
+            }
+           
         }
 
 
