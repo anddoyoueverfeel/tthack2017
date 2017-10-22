@@ -65,7 +65,7 @@ namespace Shuffle
             if (!DA.GetData(1, ref objectCorner1)) return;
             if (!DA.GetData(2, ref objectCorner2)) return;
 
-            if (!DA.GetDataList(3, objGeometry)) return;
+            if (!DA.GetDataList(3, clearGeometry)) return;
             if (!DA.GetData(4, ref clearanceCorner1)) return;
             if (!DA.GetData(5, ref clearanceCorner2)) return;
 
@@ -73,10 +73,35 @@ namespace Shuffle
             if (!DA.GetData(7, ref priority)) return;
 
             Dictionary<string, int> cornerOffsets = new Dictionary<string, int>();
-            cornerOffsets.Add("bottomLeftX", -2);
-            cornerOffsets.Add("bottomLeftY", -2);
-            cornerOffsets.Add("topRightX", 2);
-            cornerOffsets.Add("topRightY", 2);
+
+
+            int centerX = Convert.ToInt16(centerPoint.X);
+            int centerY = Convert.ToInt16(centerPoint.Y);
+
+            int clearanceCorner1X = Convert.ToInt16(centerPoint.X);
+            int clearanceCorner1Y = Convert.ToInt16(centerPoint.Y);
+
+            int clearanceCorner2X = Convert.ToInt16(centerPoint.X);
+            int clearanceCorner2Y = Convert.ToInt16(centerPoint.Y);
+
+            int objectCorner1X = Convert.ToInt16(centerPoint.X);
+            int objectCorner1Y = Convert.ToInt16(centerPoint.Y);
+
+            int objectCorner2X = Convert.ToInt16(centerPoint.X);
+            int objectCorner2Y = Convert.ToInt16(centerPoint.Y);
+
+
+            cornerOffsets.Add("toBoundingBottomLeftX", clearanceCorner1X - centerX);
+            cornerOffsets.Add("toBoundingBottomLeftY", clearanceCorner1Y - centerY);
+            cornerOffsets.Add("toBoundinTopRightX", clearanceCorner2X - centerX);
+            cornerOffsets.Add("toBoundinTopRightY", clearanceCorner1Y - centerY);
+
+
+            cornerOffsets.Add("toObjectBottomLeftX", objectCorner1X - centerX);
+            cornerOffsets.Add("toObjectBottomLeftY", objectCorner1Y - centerY);
+            cornerOffsets.Add("toObjectinTopRightX", objectCorner2X - centerX);
+            cornerOffsets.Add("toObjectinTopRightY", objectCorner2Y - centerY);
+            
 
             ShuffleBlock myBlock = new ShuffleBlock(centerPoint, cornerOffsets, priority, objGeometry, clearGeometry);
 
