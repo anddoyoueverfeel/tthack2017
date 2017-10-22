@@ -39,20 +39,36 @@ namespace Shuffle
         
         //take a list of cells from the master solver - these input cells belong to the room
         //check the room's "rules" and "blocks" to make sure they are satisfied, too
-        public Dictionary<string, int> step(List<Cell> points)
+        public Dictionary<string, int> step(List<Cell> cells)
         {
-            //
             Dictionary<string, int> result = new Dictionary<string, int>();
-            if (points.Count > size)
+            Point3d cellCenter = Utils.Centroid(cells);
+            bool includeAllBlocks = true;
+            foreach (ShuffleBlock block in blocks) {
+                Point3d outsideCenter;
+                if (Utils.GetCenterForOutsideCells(block, cells, out outsideCenter))
+                {
+                    includeAllBlocks = false;
+                    Vector3d direction = cellCenter - outsideCenter;
+                    int deltaX, deltaY;
+                    Utils.QuantifyDirection(direction, out deltaX, out deltaY);
+                    block.setDirection(deltaX, deltaY);
+                } else
+                {
+                    block.setDirection(0, 0);
+                }
+            }
+
+            if (includeAllBlocks && cells.Count > size)
             {
                 return result;
             }
             HashSet<string> grids = new HashSet<string>();
-            foreach (Cell point in points)
+            foreach (Cell point in cells)
             {
                 grids.Add(point.CellAddress());
             }
-            foreach (Cell point in points)
+            foreach (Cell point in cells)
             {
                 foreach (int stepX in new int[3] { -1, 0, 1 }) {
                     foreach (int stepY in new int[3] { -1, 0, 1 })

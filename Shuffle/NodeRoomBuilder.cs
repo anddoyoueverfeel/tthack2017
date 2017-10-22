@@ -44,7 +44,7 @@ namespace Shuffle
             Cell cell = new Shuffle.Cell();
             double priority = 0;
             string name = "";
-            GH_Colour colour = new GH_Colour(Color.Yellow);
+            List<ShuffleBlock> blocks = new List<ShuffleBlock>();
             if (!DA.GetData(0, ref size))
             {
                 return;
@@ -59,7 +59,8 @@ namespace Shuffle
             {
                 return;
             }
-            DA.SetData(0, new Room(size, cell, Guid.NewGuid(), priority, name));
+            // Add read of blocks;
+            DA.SetData(0, new Room(size, cell, blocks, Guid.NewGuid(), priority, name));
         }
     }
 }

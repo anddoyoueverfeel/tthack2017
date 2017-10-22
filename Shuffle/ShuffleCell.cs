@@ -61,6 +61,16 @@ namespace Shuffle
         {
             return X + "," + Y;
         }
+        
+        public static bool operator <=(Cell left, Cell right)
+        {
+            return left.X <= right.X && left.Y <= right.Y;
+        }
+
+        public static bool operator >=(Cell left, Cell right)
+        {
+            return left.X >= right.X && left.Y >= right.Y;
+        }
     }
 
 
