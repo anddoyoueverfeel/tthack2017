@@ -29,8 +29,8 @@ namespace Shuffle
             pManager.AddParameter(new CellParam(), "seed", "seed", "The starting cell of the room", GH_ParamAccess.item);
             pManager.AddNumberParameter("priority", "priority", "The priority of getting the room right", GH_ParamAccess.item);
             pManager.AddTextParameter("name", "name", "The name of the room", GH_ParamAccess.item);
-
-//            pManager[1].Optional = true;
+            pManager.AddParameter(new ShuffleBlockParam(), "block", "block", "The list of blocks belong to the room", GH_ParamAccess.list);
+            pManager[4].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -44,7 +44,7 @@ namespace Shuffle
             Cell cell = new Shuffle.Cell();
             double priority = 0;
             string name = "";
-            GH_Colour colour = new GH_Colour(Color.Yellow);
+            List<ShuffleBlock> blocks = new List<ShuffleBlock>();
             if (!DA.GetData(0, ref size))
             {
                 return;
@@ -58,8 +58,13 @@ namespace Shuffle
             if (!DA.GetData(3, ref name))
             {
                 return;
-            }
-            DA.SetData(0, new Room(size, cell, Guid.NewGuid(), priority, name));
+            }/*
+            if (!DA.GetDataList(4, blocks))
+            {
+                //return;
+            }*/
+            // Add read of blocks;
+            DA.SetData(0, new Room(size, cell, blocks, Guid.NewGuid(), priority, name));
         }
     }
 }
