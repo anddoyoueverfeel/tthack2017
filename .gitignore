@@ -3,7 +3,4 @@
 .vs/*
 *.csproj.user
 *.suo
-*.cache
-Shuffle/Shuffle.csproj
-Shuffle/obj/Debug64/DesignTimeResolveAssemblyReferencesInput.cache
-Shuffle/obj/Debug64/DesignTimeResolveAssemblyReferencesInput.cache
+.vs/Shuffle/v14/.suo

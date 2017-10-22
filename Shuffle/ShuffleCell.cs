@@ -12,23 +12,26 @@ namespace Shuffle
     {
         //id of room that "owns" this cell
         public Guid m_owner { set; get; }
-        //first int is what room "wants" this cell
-        //second int is how "badly" it wants it
+        
+        //key is id of the room "wants" this cell
+        //value (int) is how "badly" it wants it
         public Dictionary<Guid, int> desires { set; get; }
 
-
+        //Point that the cell is made from / represents / is tied to
         public Point3d point = new Point3d(0,0,0);
 
-
+        //
         public int X { set; get; }
         public int Y { set; get; }
 
+        //Constructor.. New cells initialize without an owner and with an empty list of rooms that want them.
         public Cell()
         {
             m_owner = Guid.Empty;
             desires = new Dictionary<Guid, int>();
         }
 
+        //constructor, explicitly construct a new cell from an old one
         public Cell(int X, int Y, Guid m_owner, Dictionary<Guid, int> desires, Point3d point)
         {
             this.X = X;
@@ -38,11 +41,28 @@ namespace Shuffle
             this.point = point;
         }
 
+        //constructor, duplicate an old cell exactly
+        public Cell(Cell oldCell)
+        {
+            this.X = oldCell.X;
+            this.Y = oldCell.Y;
+            this.m_owner = oldCell.m_owner;
+            this.desires = oldCell.desires;
+            this.point = oldCell.point;
+        }
+
+        //to do: refactor this
         public override string ToString()
         {
             return X + "," + Y;
         }
+
+        public string CellAddress()
+        {
+            return X + "," + Y;
+        }
     }
+
 
     public class CellGoo : GH_Goo<Cell>
     {
@@ -55,6 +75,8 @@ namespace Shuffle
         {
             Value = cell;
         }
+
+        //to do: is this the real validity test?
         public override bool IsValid
         {
             get
@@ -62,6 +84,7 @@ namespace Shuffle
                 return Value.X >= 0 && Value.Y >= 0;
             }
         }
+
 
         public override string TypeDescription
         {
@@ -71,11 +94,12 @@ namespace Shuffle
             }
         }
 
+
         public override string TypeName
         {
             get
             {
-                return "Cell";
+                return "Shuffle Cell";
             }
         }
 
@@ -119,6 +143,7 @@ namespace Shuffle
             return false;
         }
     }
+
 
     public class CellParam : GH_Param<CellGoo>
     {
