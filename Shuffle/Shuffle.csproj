@@ -36,8 +36,7 @@
       <HintPath>..\..\..\..\Dropbox\Occamy\Ocammy\GH_IO.dll</HintPath>
     </Reference>
     <Reference Include="Grasshopper">
-      <HintPath>..\..\..\Downloads\tthack2017\Grasshopper.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\..\Dropbox\Occamy\Ocammy\Grasshopper.dll</HintPath>
     </Reference>
     <Reference Include="RhinoCommon">
       <HintPath>..\..\..\..\Dropbox\Occamy\Ocammy\RhinoCommon.dll</HintPath>
@@ -48,10 +47,10 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ShuffleBlock.cs" />
     <Compile Include="ISteppable.cs" />
     <Compile Include="NodeCell.cs" />
     <Compile Include="ShuffleCell.cs" />
-    <Compile Include="FirstComponent.cs" />
     <Compile Include="NodeMasterSolver.cs" />
     <Compile Include="NodeRoomBuilder.cs" />
     <Compile Include="Room.cs" />

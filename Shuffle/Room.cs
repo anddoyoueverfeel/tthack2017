@@ -34,8 +34,27 @@ namespace Shuffle
             return new Room(size, cell, id, priority, name);
         }
 
+        //to do: finish centroid function
+        public Point3d Centroid(List<Cell> points)
+        {
+
+
+            foreach (Point3d point in points)
+            {
+
+            }
+            Point3d average = points.Sum()
+
+            return new Point3d();
+        }
+
+
+
+        //take a list of cells from the master solver - these input cells belong to the room
+        //check the room's "rules" and "blocks" to make sure they are satisfied, too
         public Dictionary<string, int> step(List<Cell> points)
         {
+            //
             Dictionary<string, int> result = new Dictionary<string, int>();
             if (points.Count > size)
             {
@@ -44,7 +63,7 @@ namespace Shuffle
             HashSet<string> grids = new HashSet<string>();
             foreach (Cell point in points)
             {
-                grids.Add(point.ToString());
+                grids.Add(point.CellAddress());
             }
             foreach (Cell point in points)
             {
@@ -60,7 +79,7 @@ namespace Shuffle
                         if (!grids.Contains(key))
                         {
                             grids.Add(key);
-                            result.Add(newPoint.ToString(), (int) priority);
+                            result.Add(newPoint.CellAddress(), (int) priority);
                         }
                     }
                 }
