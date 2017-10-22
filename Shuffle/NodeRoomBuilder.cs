@@ -29,8 +29,6 @@ namespace Shuffle
             pManager.AddParameter(new CellParam(), "seed", "seed", "The starting cell of the room", GH_ParamAccess.item);
             pManager.AddNumberParameter("priority", "priority", "The priority of getting the room right", GH_ParamAccess.item);
             pManager.AddTextParameter("name", "name", "The name of the room", GH_ParamAccess.item);
-
-//            pManager[1].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
