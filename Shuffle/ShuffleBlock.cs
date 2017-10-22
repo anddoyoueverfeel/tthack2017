@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using System.Diagnostics;
 
 namespace Shuffle
 {
@@ -79,24 +80,20 @@ namespace Shuffle
 
         public void Move()
         {
-            //Vector3d movementVector = new Vector3d(deltaX, deltaY, 0);
             var xf = Rhino.Geometry.Transform.Translation(deltaX, deltaY, 0);
-            //Rhino.Geometry.Transform actualTransform = new Tran();
-            //actualTransform.Translate
-            //Transform something = new Translation(deltaX, deltaY, 0);
-
-
             m_centerPoint.Transform(xf);
 
+            Debug.Print("Move deltaX: " + deltaX + " deltaY: " + deltaY);
             foreach (Curve thing in m_geomOfObject)
             {
                 thing.Transform(xf);
+                Debug.Print("Move curve: " + deltaX + " deltaY: " + deltaY);
             }
             foreach (Curve thing in m_gGeomOfClearance)
             {
                 thing.Transform(xf);
+                Debug.Print("Move thing: " + deltaX + " deltaY: " + deltaY);
             }
-           
         }
 
 
@@ -212,7 +209,6 @@ namespace Shuffle
 
             return false;
         }
-
     }
 
 

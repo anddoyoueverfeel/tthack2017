@@ -158,6 +158,10 @@ namespace Shuffle
                 }
                 Dictionary<string, int> desiresFromRoom = simulationRoom.step(simulationCellList[simulationRoom.id]);
 
+                foreach (ShuffleBlock block in simulationRoom.blocks)
+                {
+                    block.Move();
+                }
                 foreach (KeyValuePair<string, int> desireFromRoom in desiresFromRoom)
                 {
                     // do something with entry.Value or entry.Key
