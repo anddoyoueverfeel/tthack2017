@@ -15,41 +15,28 @@ namespace Shuffle
         public Cell cell { get; }
         public double priority { get; }
         public String name { get; }
+        public List<ShuffleBlock> blocks;
+
         public Boolean IsValid { get
             {
                 return size > 0;
             } }
 
-        public Room(double size, Cell cell, Guid id, double priority, string name)
+        public Room(double size, Cell cell, List<ShuffleBlock> blocks, Guid id, double priority, string name)
         {
             this.id = id;
             this.size = size;
             this.cell = cell;
             this.priority = priority;
             this.name = name;
+            this.blocks = blocks;
         }
         
         public Room Duplicate()
         {
-            return new Room(size, cell, id, priority, name);
+            return new Room(size, cell, blocks, id, priority, name);
         }
-
-        //to do: finish centroid function
-        public Point3d Centroid(List<Cell> points)
-        {
-
-
-            foreach (Point3d point in points)
-            {
-
-            }
-            Point3d average = points.Sum()
-
-            return new Point3d();
-        }
-
-
-
+        
         //take a list of cells from the master solver - these input cells belong to the room
         //check the room's "rules" and "blocks" to make sure they are satisfied, too
         public Dictionary<string, int> step(List<Cell> points)
