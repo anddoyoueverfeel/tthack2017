@@ -55,18 +55,38 @@ namespace Shuffle
         //methods
         public Dictionary<string, Cell> GetBoundingBox()
         {
+            Cell bottomLeft = new Cell();
+            Cell topRight = new Cell();
+            int centerX = Convert.ToInt16(centerPoint.X);
+            int centerY = Convert.ToInt16(centerPoint.Y);
+
+            bottomLeft.X = centerX + m_cornerOffsets["toBoundingBottomLeftX"];
+            bottomLeft.Y = centerY + m_cornerOffsets["toBoundingBottomLeftY"];
+            bottomLeft.X = centerX + m_cornerOffsets["toBoundinTopRightX"];
+            bottomLeft.Y = centerY + m_cornerOffsets["toBoundinTopRightY"];
+
             Dictionary<string, Cell> temp = new Dictionary<string, Cell>();
-            temp.Add("min", new Cell());
-            temp.Add("max", new Cell());
+            temp.Add("bottomLeft", new Cell());
+            temp.Add("topRight", new Cell());
             return temp;
         }
 
 
         public Dictionary<string, Cell> GetObjectBoundingBox()
         {
+            Cell bottomLeft = new Cell();
+            Cell topRight = new Cell();
+            int centerX = Convert.ToInt16(centerPoint.X);
+            int centerY = Convert.ToInt16(centerPoint.Y);
+
+            bottomLeft.X = centerX + m_cornerOffsets["toObjectBottomLeftX"];
+            bottomLeft.Y = centerY + m_cornerOffsets["toObjectBottomLeftY"];
+            bottomLeft.X = centerX + m_cornerOffsets["toObjectinTopRightX"];
+            bottomLeft.Y = centerY + m_cornerOffsets["toObjectinTopRightY"];
+
             Dictionary<string, Cell> temp = new Dictionary<string, Cell>();
-            temp.Add("min", new Cell());
-            temp.Add("max", new Cell());
+            temp.Add("bottomLeft", new Cell());
+            temp.Add("topRight", new Cell());
             return temp;
         }
 
