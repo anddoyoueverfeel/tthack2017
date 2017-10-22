@@ -12,20 +12,30 @@ namespace Shuffle
     {
         public Guid id { get; }
         public double size { get; }
+        public Cell cell { get; }
+        public double priority { get; }
+        public String name { get; }
         public Boolean IsValid { get
             {
                 return size > 0;
             } }
 
-        public Room(double size)
+        public Room(double size, Cell cell, Guid id, double priority, string name)
         {
-            this.id = new Guid();
+            this.id = id;
             this.size = size;
+            this.cell = cell;
+            this.priority = priority;
+            this.name = name;
         }
         
+        public Room Duplicate()
+        {
+            return new Room(size, cell, id, priority, name);
+        }
+
         public Dictionary<string, int> step(List<Cell> points)
         {
-            int priority = 0;
             Dictionary<string, int> result = new Dictionary<string, int>();
             if (points.Count > size)
             {
@@ -41,7 +51,7 @@ namespace Shuffle
                 foreach (int stepX in new int[3] { -1, 0, 1 }) {
                     foreach (int stepY in new int[3] { -1, 0, 1 })
                     {
-                        Cell newPoint = new Cell(point.X + stepX, point.Y + stepY, 0, null);
+                        Cell newPoint = new Cell(point.X + stepX, point.Y + stepY, id, new Dictionary<Guid, int>(), point.point);
                         if (newPoint.X < 0 || newPoint.Y < 0)
                         {
                             continue;
@@ -50,7 +60,7 @@ namespace Shuffle
                         if (!grids.Contains(key))
                         {
                             grids.Add(key);
-                            result.Add(newPoint.ToString(), priority);
+                            result.Add(newPoint.ToString(), (int) priority);
                         }
                     }
                 }
@@ -97,12 +107,42 @@ namespace Shuffle
 
         public override IGH_Goo Duplicate()
         {
-            return new RoomGoo(new Room(Value.size));
+            return new RoomGoo(Value.Duplicate());
         }
 
         public override string ToString()
         {
-            return "Room";
+            return "Room " + Value.id;
+        }
+
+
+        public override bool CastTo<Q>(ref Q target)
+        {
+
+            if (typeof(Q).IsAssignableFrom(typeof(Room)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)Value;
+                return true;
+            }
+            target = default(Q);
+            return false;
+        }
+
+        public override bool CastFrom(object source)
+        {
+            if (source == null) { return false; }
+
+            //Cast from BoatShell
+            if (typeof(Room).IsAssignableFrom(source.GetType()))
+            {
+                Value = (Room)source;
+                return true;
+            }
+
+            return false;
         }
     }
 

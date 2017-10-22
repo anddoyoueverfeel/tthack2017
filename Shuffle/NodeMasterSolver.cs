@@ -1,31 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Diagnostics;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
 namespace Shuffle
 {
-    public class MasterSolver : GH_Component
+    public class NodeMasterSolver : GH_Component
     {
-        /// <summary>
-        /// Initializes a new instance of the MyComponent1 class.
-        /// </summary>
-
-        private bool firstRunFlag = true;
         //cell xy, Cell class 
         private Dictionary<string, Cell> simulationField = new Dictionary<string, Cell>();
         //room id, room class
         private Dictionary<Guid, Room> simulationRooms = new Dictionary<Guid, Room>();
+        private int stepCount = 0;
 
-        public MasterSolver()
+        public NodeMasterSolver()
           : base("ShuffleSolver", "Solver",
               "Description",
-              "Shuffle", "Subcategory")
+              "Shuffle", "Solver")
         {
         }
-        
+
 
         //structure for holding a grid matrix
         //cell 
@@ -41,7 +37,7 @@ namespace Shuffle
         //check to see if persistent variables have been set for the room info, cell info, etc.
 
         //if they haven't:
-            //read the inputs and set the variables, then continue to the next part
+        //read the inputs and set the variables, then continue to the next part
 
         //read the persistent variable containing cell information (copy it into an iteration-specific variable)
 
@@ -59,9 +55,9 @@ namespace Shuffle
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddPointParameter("Bound", "B", "", GH_ParamAccess.list);
-            pManager.AddTextParameter("Room", "Room", "PLACEHOLDER", GH_ParamAccess.list);
-            //pManager.AddParameter(new RoomParameter(), "Rooms", "R", "Rooms to solve for", GH_ParamAccess.tree);
+            pManager.AddParameter(new CellParam(), "Cells", "Cells", "All possible cells", GH_ParamAccess.list);
+            //pManager.AddTextParameter("Room", "Room", "PLACEHOLDER", GH_ParamAccess.list);
+            pManager.AddParameter(new RoomParameter(), "Rooms", "R", "Rooms to solve for", GH_ParamAccess.list);
             pManager.AddBooleanParameter("Run", "Run", "Connect switch and change to 'true' to run the simulation", GH_ParamAccess.item, false);
             pManager.AddBooleanParameter("Reset", "Reset", "Connect button and change to 'true' to restart the simulation (required, if you want changes to other inputs to take effect)", GH_ParamAccess.item, false);
 
@@ -72,6 +68,32 @@ namespace Shuffle
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddPointParameter("room1", "room1", "description", GH_ParamAccess.list);
+            pManager.AddPointParameter("room2", "room2", "description", GH_ParamAccess.list);
+            pManager.AddNumberParameter("stepCount", "stepCount", "adf", GH_ParamAccess.item);
+        }
+
+        private void reset()
+        {
+            simulationField.Clear();
+            simulationRooms.Clear();
+            stepCount = 0;
+        }
+
+        private void initialize(List<Cell> cells, List<Room> rooms)
+        {
+            //set playingfield from input points
+            foreach (Cell cell in cells)
+            {
+                simulationField.Add(cell.ToString(), new Cell(cell.X, cell.Y, cell.m_owner, cell.desires, cell.point));
+            }
+
+            //set rooms from input (rooms are read once and persisted)
+            foreach (Room room in rooms)
+            {
+                simulationRooms.Add(room.id, room);
+                simulationField[room.cell.ToString()].m_owner = room.id;
+            }
         }
 
         /// <summary>
@@ -80,28 +102,27 @@ namespace Shuffle
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<Point3d> cellsAsPoints = new List<Point3d>();
+            List<Cell> cellsToProcess = new List<Cell>();
             //room
             List<Room> roomsToProcess = new List<Room>();
             //List<string> rooms = new List<string>();
             bool runSimulationFlag = false;
-            bool resetSimulationFlag = false;
+            bool resetSimulation = false;
+            Dictionary<Guid, List<Cell>> simulationCellList = new Dictionary<Guid, List<Cell>>();
 
-
-            if (!DA.GetDataList(0, cellsAsPoints)) return;
+            if (!DA.GetDataList(0, cellsToProcess)) return;
             if (!DA.GetDataList(1, roomsToProcess)) return;
             if (!DA.GetData(2, ref runSimulationFlag)) return;
-            if (!DA.GetData(3, ref resetSimulationFlag)) return;
+            if (!DA.GetData(3, ref resetSimulation)) return;
 
-
-            //if reset button gets pushed, clear the dictionary of the "gameboard"
-            if (resetSimulationFlag)
+            if (resetSimulation)
             {
-                simulationField.Clear();
-                simulationRooms.Clear();
-
+                reset();
+                initialize(cellsToProcess, roomsToProcess);
+                return;
             }
 
+            //if reset button gets pushed, clear the dictionary of the "gameboard"
 
             //todo: ensure that only one bound exists (for performance reasons...)
             if (!runSimulationFlag)
@@ -110,44 +131,46 @@ namespace Shuffle
                 return;
             }
 
-
-
-            //it must be the first run, or at least the first run since a reset
-            if (firstRunFlag)
+            Debug.Print("------------------------" + stepCount + "------------------");
+            
+            foreach (Cell cell in simulationField.Values)
             {
-                //set playingfield from input points
-                foreach (Point3d cellAsPoint in cellsAsPoints)
+                if (cell.m_owner.Equals(Guid.Empty))
                 {
-                    simulationField.Add(cellAsPoint.Y.ToString() + cellAsPoint.X.ToString(), new Cell());
+                    continue;
                 }
-
-                
-                //set rooms from input (rooms are read once and persisted)
-                foreach (Room room in roomsToProcess)
+                if (simulationCellList.ContainsKey(cell.m_owner))
                 {
-                    simulationRooms.Add(room.id, room);
+                    simulationCellList[cell.m_owner].Add(cell);
+                }
+                else
+                {
+                    List<Cell> list = new List<Cell>();
+                    list.Add(cell);
+                    simulationCellList.Add(cell.m_owner, list);
                 }
             }
-
-            //TODO:
-            List<Cell> cells = new List<Cell>();
-            //call each room's "step" method
             foreach (Room simulationRoom in simulationRooms.Values)
             {
-                Dictionary<string, int> desiresFromRoom = simulationRoom.step(cells);
+                if (!simulationCellList.ContainsKey(simulationRoom.id))
+                {
+                    continue;
+                }
+                Dictionary<string, int> desiresFromRoom = simulationRoom.step(simulationCellList[simulationRoom.id]);
 
                 foreach (KeyValuePair<string, int> desireFromRoom in desiresFromRoom)
                 {
                     // do something with entry.Value or entry.Key
                     //update the field cells to include the desires of the room
                     //to do: refactor this to make it more clear what is going on
-                    this.simulationField[desireFromRoom.Key].desires.Add(simulationRoom.id, desireFromRoom.Value);
-
+                    if (simulationField.ContainsKey(desireFromRoom.Key))
+                    {
+                        simulationField[desireFromRoom.Key].desires.Add(simulationRoom.id, desireFromRoom.Value);
+                        //Debug.Print("desireFromRoom: " + desireFromRoom.Key  + " " + simulationRoom.id + " " + desireFromRoom.Value + "\n");
+                    }
                 }
 
             }
-
-
             //evaluate each cell in the simulationfield to determine what action should be taken on it
             foreach (Cell simulationCell in simulationField.Values)
             {
@@ -158,11 +181,51 @@ namespace Shuffle
                 //second int is how "badly" it wants it
 
                 // results.MaxBy(kvp => kvp.Value).Key;
-
+                if (simulationCell.desires.Count > 0)
+                {
+                    int maxPriority = -1 ;
+                    Guid pickedRoom = Guid.Empty;
+                    foreach (KeyValuePair<Guid, int> pair in simulationCell.desires)
+                    {
+                        if (pair.Value > maxPriority)
+                        {
+                            maxPriority = pair.Value;
+                            pickedRoom = pair.Key;
+                        }
+                    }
+                    simulationCell.m_owner = pickedRoom;
+                    simulationCell.desires.Clear();
+                }
+            }
+            
+            Dictionary<Guid, List<Point3d>> outputPoints = new Dictionary<Guid, List<Point3d>>();
+            simulationCellList.Clear();
+            foreach (Cell cell in simulationField.Values)
+            {
+                if (cell.m_owner.Equals(Guid.Empty))
+                {
+                    continue;
+                }
+                if (outputPoints.ContainsKey(cell.m_owner))
+                {
+                    outputPoints[cell.m_owner].Add(cell.point);
+                }
+                else
+                {
+                    List<Point3d> list = new List<Point3d>();
+                    list.Add(cell.point);
+                    outputPoints.Add(cell.m_owner, list);
+                }
             }
 
+            int i = 0;
+            foreach (KeyValuePair<Guid, List<Point3d>> pair in outputPoints) { 
+                DA.SetDataList(i, pair.Value);
+                i++;
+            }
+            DA.SetData(2, stepCount);
 
-            //
+            stepCount++;
         }
 
         /// <summary>

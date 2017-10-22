@@ -6,12 +6,13 @@ using Rhino.Geometry;
 
 namespace Shuffle
 {
-    public class MyComponent1 : GH_Component
+    public class NodeCell : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
-        public MyComponent1()
+        /// 
+        public NodeCell()
           : base("CreateCells", "Cells",
               "Create Cells from Points",
               "Shuffle", "sy")
@@ -53,10 +54,10 @@ namespace Shuffle
                 int Y = Convert.ToInt16(point.Y);
 
 
-                Cell cell = new Shuffle.Cell(X, Y, 0, null);
+                Cell cell = new Cell(X, Y, Guid.Empty, new Dictionary<Guid, int>(), point);
                 createdCells.Add(cell);
             }
-
+            
             DA.SetDataList(0, createdCells);
 
 
