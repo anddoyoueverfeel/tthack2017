@@ -14,10 +14,11 @@ namespace Shuffle
         private Dictionary<string, int> m_cornerOffsets;
         private int m_rotationDegrees; //for now this is only intervals of 90
         private int m_priority;
-        private List<Curve> m_geomOfObject;
-        private List<Curve> m_gGeomOfClearance;
+        public List<Curve> m_geomOfObject { set; get; }
+        public List<Curve> m_gGeomOfClearance { set; get; }
         private int deltaX = 0;
         private int deltaY = 0;
+
 
         //constructors
         public ShuffleBlock()
@@ -63,12 +64,12 @@ namespace Shuffle
 
             bottomLeft.X = centerX + m_cornerOffsets["toBoundingBottomLeftX"];
             bottomLeft.Y = centerY + m_cornerOffsets["toBoundingBottomLeftY"];
-            bottomLeft.X = centerX + m_cornerOffsets["toBoundinTopRightX"];
-            bottomLeft.Y = centerY + m_cornerOffsets["toBoundinTopRightY"];
+            topRight.X = centerX + m_cornerOffsets["toBoundinTopRightX"];
+            topRight.Y = centerY + m_cornerOffsets["toBoundinTopRightY"];
 
             Dictionary<string, Cell> temp = new Dictionary<string, Cell>();
-            temp.Add("bottomLeft", new Cell());
-            temp.Add("topRight", new Cell());
+            temp.Add("bottomLeft", bottomLeft);
+            temp.Add("topRight", topRight);
             return temp;
         }
 
@@ -82,12 +83,12 @@ namespace Shuffle
 
             bottomLeft.X = centerX + m_cornerOffsets["toObjectBottomLeftX"];
             bottomLeft.Y = centerY + m_cornerOffsets["toObjectBottomLeftY"];
-            bottomLeft.X = centerX + m_cornerOffsets["toObjectinTopRightX"];
-            bottomLeft.Y = centerY + m_cornerOffsets["toObjectinTopRightY"];
+            topRight.X = centerX + m_cornerOffsets["toObjectinTopRightX"];
+            topRight.Y = centerY + m_cornerOffsets["toObjectinTopRightY"];
 
             Dictionary<string, Cell> temp = new Dictionary<string, Cell>();
-            temp.Add("bottomLeft", new Cell());
-            temp.Add("topRight", new Cell());
+            temp.Add("bottomLeft", bottomLeft);
+            temp.Add("topRight", topRight);
             return temp;
         }
 

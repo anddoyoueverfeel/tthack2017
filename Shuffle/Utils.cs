@@ -10,8 +10,8 @@ namespace Shuffle
     using BoundingBox = Dictionary<string, Cell>;
     class Utils
     {
-        public static string BBOX_MIN = "min";
-        public static string BBOX_MAX = "max";
+        public static string BBOX_MIN = "bottomLeft";
+        public static string BBOX_MAX = "topRight";
         public static Point3d Centroid(List<Cell> cells)
         {
             Point3d point = new Point3d();
@@ -54,7 +54,8 @@ namespace Shuffle
 
         public static bool IsCellInBoundingBox(Cell cell, BoundingBox box)
         {
-            return cell >= box[BBOX_MIN] && cell <= box[BBOX_MAX];
+            return cell.X >= box[BBOX_MIN].X + 0.7 && cell.Y >= box[BBOX_MIN].Y + 0.7 &&
+                cell.X <= box[BBOX_MAX].X - 0.7 && cell.Y <= box[BBOX_MAX].Y - 0.7;
         }
     
         public static Point3d AddCellsInBoundingBox(BoundingBox box)
@@ -79,10 +80,11 @@ namespace Shuffle
                 outsideCenter = new Point3d();
                 return false;
             }
-            var boundingBox = block.GetBoundingBox();
+            
+            var boundingBox = block.GetBoundingBox();/*
             boundingBox[BBOX_MIN] = new Cell(0, 0, Guid.Empty, new Dictionary<Guid, int>(), new Point3d(0, 0, 0));
             boundingBox[BBOX_MAX] = new Cell(60, 60, Guid.Empty, new Dictionary<Guid, int>(), new Point3d(60, 60, 0));
-
+            */
             Debug.Print("boundingBox: " + boundingBox[BBOX_MIN] + "." + boundingBox[BBOX_MAX] + "\n");
             var sumPoint = AddCellsInBoundingBox(boundingBox);
             var totalCells = CountCellsInBoundingBox(boundingBox);
@@ -100,7 +102,7 @@ namespace Shuffle
             int totalCellsOutside = totalCells - totalCellsInside;
             Debug.Print("total cells: " + totalCells + "\n");
             Debug.Print("total inside cells: " + totalCellsInside + "\n");
-            if (totalCellsOutside == 0)
+            if (totalCellsOutside < 100)
             {
                 outsideCenter = new Point3d();
                 return false;

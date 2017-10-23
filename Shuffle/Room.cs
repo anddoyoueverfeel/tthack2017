@@ -74,6 +74,7 @@ namespace Shuffle
             }
             foreach (Cell point in cells)
             {
+                result.Add(point.CellAddress(), (int)priority);
                 foreach (int stepX in new int[3] { -1, 0, 1 }) {
                     foreach (int stepY in new int[3] { -1, 0, 1 })
                     {

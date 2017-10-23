@@ -78,23 +78,23 @@ namespace Shuffle
             int centerX = Convert.ToInt16(centerPoint.X);
             int centerY = Convert.ToInt16(centerPoint.Y);
 
-            int clearanceCorner1X = Convert.ToInt16(centerPoint.X);
-            int clearanceCorner1Y = Convert.ToInt16(centerPoint.Y);
+            int clearanceCorner1X = Convert.ToInt16(clearanceCorner1.X);
+            int clearanceCorner1Y = Convert.ToInt16(clearanceCorner1.Y);
 
-            int clearanceCorner2X = Convert.ToInt16(centerPoint.X);
-            int clearanceCorner2Y = Convert.ToInt16(centerPoint.Y);
+            int clearanceCorner2X = Convert.ToInt16(clearanceCorner2.X);
+            int clearanceCorner2Y = Convert.ToInt16(clearanceCorner2.Y);
 
-            int objectCorner1X = Convert.ToInt16(centerPoint.X);
-            int objectCorner1Y = Convert.ToInt16(centerPoint.Y);
+            int objectCorner1X = Convert.ToInt16(objectCorner1.X);
+            int objectCorner1Y = Convert.ToInt16(objectCorner1.Y);
 
-            int objectCorner2X = Convert.ToInt16(centerPoint.X);
-            int objectCorner2Y = Convert.ToInt16(centerPoint.Y);
+            int objectCorner2X = Convert.ToInt16(objectCorner2.X);
+            int objectCorner2Y = Convert.ToInt16(objectCorner2.Y);
 
 
             cornerOffsets.Add("toBoundingBottomLeftX", clearanceCorner1X - centerX);
             cornerOffsets.Add("toBoundingBottomLeftY", clearanceCorner1Y - centerY);
             cornerOffsets.Add("toBoundinTopRightX", clearanceCorner2X - centerX);
-            cornerOffsets.Add("toBoundinTopRightY", clearanceCorner1Y - centerY);
+            cornerOffsets.Add("toBoundinTopRightY", clearanceCorner2Y - centerY);
 
 
             cornerOffsets.Add("toObjectBottomLeftX", objectCorner1X - centerX);

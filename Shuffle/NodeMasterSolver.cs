@@ -70,7 +70,9 @@ namespace Shuffle
         {
             pManager.AddPointParameter("room1", "room1", "description", GH_ParamAccess.list);
             pManager.AddPointParameter("room2", "room2", "description", GH_ParamAccess.list);
+            pManager.AddPointParameter("room3", "room3", "description", GH_ParamAccess.list);
             pManager.AddNumberParameter("stepCount", "stepCount", "adf", GH_ParamAccess.item);
+            pManager.AddCurveParameter("room objects", "RO", "objects from the room, watch them go!", GH_ParamAccess.list);
         }
 
         private void reset()
@@ -109,6 +111,7 @@ namespace Shuffle
             bool runSimulationFlag = false;
             bool resetSimulation = false;
             Dictionary<Guid, List<Cell>> simulationCellList = new Dictionary<Guid, List<Cell>>();
+            List<Curve> showMeMyBlocks = new List<Curve>();
 
             if (!DA.GetDataList(0, cellsToProcess)) return;
             if (!DA.GetDataList(1, roomsToProcess)) return;
@@ -161,6 +164,15 @@ namespace Shuffle
                 foreach (ShuffleBlock block in simulationRoom.blocks)
                 {
                     block.Move();
+                    foreach (Curve thing in block.m_geomOfObject)
+                    {
+                        showMeMyBlocks.Add(thing);
+                    }
+                    foreach (Curve thing in block.m_gGeomOfClearance)
+                    {
+                        showMeMyBlocks.Add(thing);
+                    }
+                    
                 }
                 foreach (KeyValuePair<string, int> desireFromRoom in desiresFromRoom)
                 {
@@ -227,8 +239,10 @@ namespace Shuffle
                 DA.SetDataList(i, pair.Value);
                 i++;
             }
-            DA.SetData(2, stepCount);
 
+
+            DA.SetData(3, stepCount);
+            DA.SetDataList(4, showMeMyBlocks);
             stepCount++;
         }
 
